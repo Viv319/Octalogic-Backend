@@ -32,38 +32,6 @@ const createVehicalBooking = async (req, res) => {
   }
 }
 
-const deleteVehicalBooking = async (req, res) => {
-  try {
-    const { id } = req.params
-    await Vehical.findByIdAndDelete(id)
-    res.json({
-      status: 'SUCCESS',
-      message: 'Vehical details deleted successfully'
-    })
-  } catch (error) {
-    res.status(500).json({
-      status: 'FAILED',
-      message: 'Something went wrong'
-    })
-  }
-}
-
-const getVehicalBookingById = async (req,res) =>{
-  try{
-    const {id} = req.params
-    const vehical = await Vehical.findById(id)
-    res.json({
-      status: 'SUCCESS',
-      data: vehical
-    })
-  } catch(error){
-    res.status(500).json({
-      status: 'FAILED',
-      message:'Something went wrong'
-    })
-  }
-}
-
 const getVehicalListByWheels = async (req,res)=>{
   try{
     const {numberOfWheels} = req.params
@@ -87,8 +55,8 @@ const updateVehicalBooking = async (req, res) => {
     // const newData = req.body;
     // const existingData = await Vehical.findById(id);
 
-    // if (existingData.bookEndDate==null || ((newData.bookStartDate > existingData.bookEndDate)||(newData.bookEndDate < existingData.bookStartDate))) {
-      // Proceed with the update
+    if (existingData.bookEndDate==null || ((newData.bookStartDate > existingData.bookEndDate)||(newData.bookEndDate < existingData.bookStartDate))) {
+     // Proceed with the update moment 
       console.log("new booking is possible")      
 
       const { firstName, lastName, numberOfWheels, typeOfVehical, model, bookStartDate, bookEndDate } = req.body
@@ -118,7 +86,5 @@ module.exports = {
   getVehicalsBooking,
   createVehicalBooking,
   updateVehicalBooking,
-  deleteVehicalBooking,
-  getVehicalBookingById,
   getVehicalListByWheels
 }
