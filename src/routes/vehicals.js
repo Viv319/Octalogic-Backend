@@ -5,7 +5,8 @@ const {
     createVehicalBooking,
     updateVehicalBooking,
     deleteVehicalBooking,
-    getVehicalBookingById
+    getVehicalBookingById,
+    getVehicalListByWheels
 } = require('../controllers/vehicals.js')
 
 const router = express.Router()
@@ -19,5 +20,7 @@ router.patch('/vehicals/update/:id', updateVehicalBooking)
 router.delete('/vehicals/delete/:id', deleteVehicalBooking)
 
 router.get('/vehicals/:id',getVehicalBookingById)
+
+router.get('/vehicals/getByWheels/:numberOfWheels',getVehicalListByWheels)
 
 module.exports = router

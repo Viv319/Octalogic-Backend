@@ -1,4 +1,4 @@
-const Vehical = require('../models/VehicalDatabase.js')
+const Vehical = require('../models/Vehical.js')
 
 const getVehicalsBooking = async (req, res) => {
   try {
@@ -23,23 +23,6 @@ const createVehicalBooking = async (req, res) => {
     res.json({
       status: 'SUCCESS',
       message: 'Vehical booked successfully'
-    })
-  } catch (error) {
-    res.status(500).json({
-      status: 'FAILED',
-      message: 'Something went wrong'
-    })
-  }
-}
-
-const updateVehicalBooking = async (req, res) => {
-  try {
-    const { id } = req.params
-    const { modelName, ownerName, purchaseYear, purchaseCost } = req.body
-    await Vehical.findByIdAndUpdate(id, { modelName, ownerName, purchaseYear, purchaseCost })
-    res.json({
-      status: 'SUCCESS',
-      message: 'Vehical details updated successfully'
     })
   } catch (error) {
     res.status(500).json({
@@ -81,11 +64,61 @@ const getVehicalBookingById = async (req,res) =>{
   }
 }
 
+const getVehicalListByWheels = async (req,res)=>{
+  try{
+    const {numberOfWheels} = req.params
+    const vehicles = await Vehical.find({numberOfWheels:numberOfWheels}).exec();
+    res.json({
+      status:'SUCCESS',
+      data: vehicles
+    })
+  }catch(error){
+    res.status(500).json({
+      status: 'FAILED',
+      message:'Something went wrong'
+    })
+  }
+}
+
+const updateVehicalBooking = async (req, res) => {
+  try {
+    const { id } = req.params
+    
+    // const newData = req.body;
+    // const existingData = await Vehical.findById(id);
+
+    // if (existingData.bookEndDate==null || ((newData.bookStartDate > existingData.bookEndDate)||(newData.bookEndDate < existingData.bookStartDate))) {
+      // Proceed with the update
+      console.log("new booking is possible")      
+
+      const { firstName, lastName, numberOfWheels, typeOfVehical, model, bookStartDate, bookEndDate } = req.body
+      await Vehical.findByIdAndUpdate(id, { firstName, lastName, numberOfWheels, typeOfVehical, model, bookStartDate, bookEndDate })
+      res.json({
+      status: 'SUCCESS',
+      message: 'Vehical booking successful'
+    })
+    
+    // }
+    // else {
+      // res.status(500).json({
+      //   status: 'FAILED',
+      //   message: 'Sorry we have booking in this date'
+      // })
+      // console.log("booking is not possible")
+    // }
+  } catch (error) {
+    res.status(500).json({
+      status: 'FAILED',
+      message: 'Something went wrong'
+    })
+  }
+}
 
 module.exports = {
   getVehicalsBooking,
   createVehicalBooking,
   updateVehicalBooking,
   deleteVehicalBooking,
-  getVehicalBookingById
+  getVehicalBookingById,
+  getVehicalListByWheels
 }
