@@ -1,4 +1,6 @@
 const Vehical = require('../models/Vehical.js')
+var moment = require('moment');
+moment().format(); 
 
 const getVehicalsBooking = async (req, res) => {
   try {
@@ -15,10 +17,10 @@ const getVehicalsBooking = async (req, res) => {
   }
 }
 
-const createVehicalBooking = async (req, res) => {
+const addNewVehicalForBooking = async (req, res) => {
   try {
     const { firstName, lastName, numberOfWheels, typeOfVehical, model, bookStartDate, bookEndDate } = req.body
-
+    
     await Vehical.create({ firstName, lastName, numberOfWheels, typeOfVehical, model, bookStartDate, bookEndDate })
     res.json({
       status: 'SUCCESS',
@@ -48,32 +50,42 @@ const getVehicalListByWheels = async (req,res)=>{
   }
 }
 
-const updateVehicalBooking = async (req, res) => {
+const createVehicalBooking = async (req, res) => {
   try {
     const { id } = req.params
-    
-    // const newData = req.body;
-    // const existingData = await Vehical.findById(id);
+    const newData = req.body;
+    const existingData = await Vehical.findById(id);
 
-    if (existingData.bookEndDate==null || ((newData.bookStartDate > existingData.bookEndDate)||(newData.bookEndDate < existingData.bookStartDate))) {
-     // Proceed with the update moment 
-      console.log("new booking is possible")      
+          // Parse the date strings into Moment.js objects
+          const newDataStartDate = moment(newData.bookStartDate);
+          const newDataEndDate = moment(newData.bookEndDate);
 
-      const { firstName, lastName, numberOfWheels, typeOfVehical, model, bookStartDate, bookEndDate } = req.body
+          const existingDataStartDate = moment(existingData.bookStartDate);    
+          const existingDataEndDate = moment(existingData.bookEndDate);    
+          console.log(newDataStartDate)
+          console.log(newDataEndDate)
+          console.log(existingDataStartDate)
+          console.log(existingDataEndDate)
+
+     if (existingDataEndDate==null || existingDataStartDate==null ( existingDataEndDate.isBefore(newDataStartDate)||newDataEndDate.isBefore(existingDataStartDate))) {
+
+      const { firstName, lastName, numberOfWheels, typeOfVehical, model, bookStartDate, bookEndDate} = req.body
       await Vehical.findByIdAndUpdate(id, { firstName, lastName, numberOfWheels, typeOfVehical, model, bookStartDate, bookEndDate })
+      
+      console.log("new booking is possible") 
       res.json({
       status: 'SUCCESS',
       message: 'Vehical booking successful'
     })
     
-    // }
-    // else {
-      // res.status(500).json({
-      //   status: 'FAILED',
-      //   message: 'Sorry we have booking in this date'
-      // })
-      // console.log("booking is not possible")
-    // }
+     }
+    else {
+      res.status(500).json({
+        status: 'FAILED',
+        message: 'Sorry we have booking in this date'
+      })
+      console.log("booking is not possible")
+    }
   } catch (error) {
     res.status(500).json({
       status: 'FAILED',
@@ -85,6 +97,6 @@ const updateVehicalBooking = async (req, res) => {
 module.exports = {
   getVehicalsBooking,
   createVehicalBooking,
-  updateVehicalBooking,
+  addNewVehicalForBooking,
   getVehicalListByWheels
 }

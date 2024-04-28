@@ -3,7 +3,7 @@ const express = require('express')
 const { 
     getVehicalsBooking,
     createVehicalBooking,
-    updateVehicalBooking,
+    addNewVehicalForBooking,
     getVehicalListByWheels
 } = require('../controllers/vehicals.js')
 
@@ -13,7 +13,7 @@ router.get('/vehicals', getVehicalsBooking)
 
 router.post('/vehicals/createBooking', createVehicalBooking)
 
-router.patch('/vehicals/update/:id', updateVehicalBooking)
+router.patch('/vehicals/update/:id', addNewVehicalForBooking)
 
 router.get('/vehicals/getByWheels/:numberOfWheels',getVehicalListByWheels)
 
