@@ -2,7 +2,7 @@ const Vehical = require('../models/Vehical.js')
 var moment = require('moment');
 moment().format(); 
 
-const getVehicalsBooking = async (req, res) => {
+const getAllVehicalsBooking = async (req, res) => {
   try {
     const vehicals = await Vehical.find()
     res.json({
@@ -61,15 +61,18 @@ const createVehicalBooking = async (req, res) => {
           const newDataEndDate = moment(newData.bookEndDate);
 
           const existingDataStartDate = moment(existingData.bookStartDate);    
-          const existingDataEndDate = moment(existingData.bookEndDate);    
-          console.log(newDataStartDate)
-          console.log(newDataEndDate)
-          console.log(existingDataStartDate)
-          console.log(existingDataEndDate)
+          const existingDataEndDate = moment(existingData.bookEndDate);
 
-     if (existingDataEndDate==null || existingDataStartDate==null ( existingDataEndDate.isBefore(newDataStartDate)||newDataEndDate.isBefore(existingDataStartDate))) {
+          // 2024-04-26   2024-04-19
+          // 2024-04-27    2024-04-20
+          // "bookStartDate": "2024-04-21T00:00:00.000Z",
+          // "bookEndDate": "2024-04-25T00:00:00.000Z",
 
+     if (existingDataEndDate==null || (existingDataStartDate.isAfter(newDataEndDate) || existingDataEndDate.isBefore(newDataStartDate))) {
+
+      console.log("inside if")
       const { firstName, lastName, numberOfWheels, typeOfVehical, model, bookStartDate, bookEndDate} = req.body
+      console.log("after req.body")
       await Vehical.findByIdAndUpdate(id, { firstName, lastName, numberOfWheels, typeOfVehical, model, bookStartDate, bookEndDate })
       
       console.log("new booking is possible") 
@@ -95,8 +98,8 @@ const createVehicalBooking = async (req, res) => {
 }
 
 module.exports = {
-  getVehicalsBooking,
-  createVehicalBooking,
+  getAllVehicalsBooking,
   addNewVehicalForBooking,
-  getVehicalListByWheels
+  getVehicalListByWheels,
+  createVehicalBooking
 }

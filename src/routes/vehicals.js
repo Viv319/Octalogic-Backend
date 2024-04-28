@@ -1,20 +1,21 @@
 const express = require('express')
 
 const { 
-    getVehicalsBooking,
-    createVehicalBooking,
+    getAllVehicalsBooking,
     addNewVehicalForBooking,
-    getVehicalListByWheels
+    getVehicalListByWheels,
+    createVehicalBooking
 } = require('../controllers/vehicals.js')
 
 const router = express.Router()
 
-router.get('/vehicals', getVehicalsBooking)
+router.get('/vehicals', getAllVehicalsBooking)
 
-router.post('/vehicals/createBooking', createVehicalBooking)
-
-router.patch('/vehicals/update/:id', addNewVehicalForBooking)
+router.post('/vehicals/addNewVehicalInfo', addNewVehicalForBooking)
 
 router.get('/vehicals/getByWheels/:numberOfWheels',getVehicalListByWheels)
+
+router.patch('/vehicals/booking/:id', createVehicalBooking)
+
 
 module.exports = router
